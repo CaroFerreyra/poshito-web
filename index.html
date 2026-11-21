@@ -121,7 +121,7 @@
 
     <div class="cards">
       <article class="card">
-        <div class="card__img"><img src="img/servicio-1.jpg" alt="" loading="lazy"></div>
+        <div class="card__img"><img src="img/image-1.png" alt="" loading="lazy"></div>
         <div class="card__body">
           <span class="card__num">01</span>
           <h3 class="h3" data-i18n="services.1.title">Private events</h3>
@@ -129,7 +129,7 @@
         </div>
       </article>
       <article class="card">
-        <div class="card__img"><img src="img/servicio-2.jpg" alt="" loading="lazy"></div>
+        <div class="card__img"><img src="img/image-2.png" alt="" loading="lazy"></div>
         <div class="card__body">
           <span class="card__num">02</span>
           <h3 class="h3" data-i18n="services.2.title">Corporate</h3>
@@ -137,13 +137,35 @@
         </div>
       </article>
       <article class="card">
-        <div class="card__img"><img src="img/servicio-3.jpg" alt="" loading="lazy"></div>
+        <div class="card__img"><img src="img/image-3.png" alt="" loading="lazy"></div>
         <div class="card__body">
           <span class="card__num">03</span>
           <h3 class="h3" data-i18n="services.3.title">Celebrations</h3>
           <p data-i18n="services.3.text">Small weddings, christenings and communions with a sharing menu or a served dinner.</p>
         </div>
       </article>
+    </div>
+
+    <!-- Qué ofrecemos (dentro de Servicios) -->
+    <div class="offer" id="offer">
+      <div class="offer__inner">
+        <h3 class="h2 h2--md offer__title" data-i18n="offer.title">What we offer</h3>
+        <div class="offer__cta">
+          <p class="body" data-i18n="offer.cta">Have an event, meeting or party that needs something different? Don't hesitate to message us and we'll see what we can do for you.</p>
+          <div class="offer__ctas">
+            <a href="#contact" class="btn btn--primary" data-i18n="hero.cta">Get a quote</a>
+            <a class="btn btn--outline" data-link="wa" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-wa"/></svg>
+              <span>WhatsApp</span>
+            </a>
+          </div>
+        </div>
+        <ul class="offer__list">
+          <li><span class="offer__mark" aria-hidden="true">✺</span><p data-i18n="offer.1">Catering service.</p></li>
+          <li><span class="offer__mark" aria-hidden="true">✺</span><p data-i18n="offer.2">Dishes made by us, packed and ready for you to finish and enjoy at your own event.</p></li>
+          <li><span class="offer__mark" aria-hidden="true">✺</span><p data-i18n="offer.3">Everyday classics with our own twist: Spanish tortilla, croquetas, Argentinian empanadas and more.</p></li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -153,12 +175,14 @@
       <div class="about__text">
         <p class="eyebrow" data-i18n="about.eyebrow">About us</p>
         <h2 class="h2" data-i18n="about.title">Three friends, one kitchen</h2>
+        <p class="body" data-i18n="about.text2">We're a group of Argentinian and Spanish chefs with years of experience in both classic taverns and neighbourhood eateries and fine dining restaurants. We offer tailor-made food solutions for events, gatherings or everyday life.</p>
+        <p class="body" data-i18n="about.text3">We focus on the quality of our food, and on turning traditional dishes and bites into a memorable experience.</p>
         <p class="body" data-i18n="about.text">We started cooking for friends and family, and word of mouth did the rest. We're still the same today: fresh market produce, home recipes and lots of love on every tray.</p>
       </div>
       <ul class="team">
-        <li><div class="team__photo"><img src="img/equipo-javier.jpg" alt="Javier" loading="lazy"></div><span>Javier</span></li>
-        <li><div class="team__photo"><img src="img/equipo-tamara.jpg" alt="Tamara" loading="lazy"></div><span>Tamara</span></li>
-        <li><div class="team__photo"><img src="img/equipo-leandro.jpg" alt="Leandro" loading="lazy"></div><span>Leandro</span></li>
+        <li><div class="team__photo"><img src="img/image-javier.png" alt="Javier" loading="lazy"></div><span>Javier</span></li>
+        <li><div class="team__photo"><img src="img/image-tamara.png" alt="Tamara" loading="lazy"></div><span>Tamara</span></li>
+        <li><div class="team__photo"><img src="img/image-leandro.png" alt="Leandro" loading="lazy"></div><span>Leandro</span></li>
       </ul>
     </div>
   </section>
@@ -202,6 +226,7 @@
           <label class="field"><span data-i18n="form.guests">Number of guests</span><input name="guests" type="number" min="1" inputmode="numeric" data-i18n-ph="form.guests.ph" placeholder="Approximately"></label>
           <label class="field field--full"><span data-i18n="form.message">Message</span><textarea name="message" rows="5" required data-i18n-ph="form.message.ph" placeholder="Tell us what you have in mind: menu, allergies, timing…"></textarea></label>
         </div>
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" hidden>
         <label class="check"><input type="checkbox" name="privacy" required><span data-i18n="form.privacy">I accept the privacy policy</span></label>
         <p class="form__msg" role="status" aria-live="polite"></p>
         <div class="form__send">
@@ -216,16 +241,16 @@
   <section class="section section--ig wrap" id="instagram">
     <div class="section__head section__head--row">
       <div>
-        <p class="eyebrow" data-contact="ig">@somos.poshito</p>
+        <a class="eyebrow ig-handle" data-link="ig" data-contact="ig" target="_blank" rel="noopener">@somos.poshito</a>
         <h2 class="h2 h2--md" data-i18n="ig.title">Follow us on Instagram</h2>
       </div>
       <a class="btn btn--outline" data-link="ig" target="_blank" rel="noopener" data-i18n="ig.cta">Follow on Instagram</a>
     </div>
-    <div class="ig-grid">
-      <a class="ig-post" data-link="ig" target="_blank" rel="noopener"><img src="img/instagram-1.jpg" alt="" loading="lazy"><span data-i18n="ig.post">Instagram post</span></a>
-      <a class="ig-post" data-link="ig" target="_blank" rel="noopener"><img src="img/instagram-2.jpg" alt="" loading="lazy"><span data-i18n="ig.post">Instagram post</span></a>
-      <a class="ig-post" data-link="ig" target="_blank" rel="noopener"><img src="img/instagram-3.jpg" alt="" loading="lazy"><span data-i18n="ig.post">Instagram post</span></a>
-      <a class="ig-post" data-link="ig" target="_blank" rel="noopener"><img src="img/instagram-4.jpg" alt="" loading="lazy"><span data-i18n="ig.post">Instagram post</span></a>
+    <div class="ig-grid" id="ig-grid">
+      <a class="ig-post" data-link="ig" target="_blank" rel="noopener"><img src="img/post-1.png" alt="" loading="lazy"><span class="sr-only" data-i18n="ig.post">Instagram post</span></a>
+      <a class="ig-post" data-link="ig" target="_blank" rel="noopener"><img src="img/post-2.png" alt="" loading="lazy"><span class="sr-only" data-i18n="ig.post">Instagram post</span></a>
+      <a class="ig-post" data-link="ig" target="_blank" rel="noopener"><img src="img/post-3.png" alt="" loading="lazy"><span class="sr-only" data-i18n="ig.post">Instagram post</span></a>
+      <a class="ig-post" data-link="ig" target="_blank" rel="noopener"><img src="img/post-4.png" alt="" loading="lazy"><span class="sr-only" data-i18n="ig.post">Instagram post</span></a>
     </div>
   </section>
 

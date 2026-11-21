@@ -83,11 +83,28 @@
   $all("a", links).forEach(function (a) { a.addEventListener("click", closeMenu); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
 
+  /* ---------- logo: vuelve arriba ----------
+     #top es el propio nav (sticky), así que el ancla sola no hace scroll */
+  document.querySelector(".nav__logo").addEventListener("click", function (e) {
+    e.preventDefault();
+    closeMenu();
+    window.scrollTo({ top: 0 }); // respeta scroll-behavior (suave, o sin animación con reduced motion)
+    if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search);
+  });
+
   /* ---------- sticky nav shadow ---------- */
   var nav = document.querySelector(".nav");
   function onScroll() { nav.classList.toggle("is-scrolled", window.scrollY > 8); }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  /* ---------- nav height -> --nav-h (scroll-margin de las anclas) ---------- */
+  function setNavH() {
+    document.documentElement.style.setProperty("--nav-h", nav.offsetHeight + "px");
+  }
+  setNavH();
+  if ("ResizeObserver" in window) new ResizeObserver(setNavH).observe(nav);
+  else window.addEventListener("resize", setNavH);
 
   /* ---------- placeholder images ---------- */
   $all("img").forEach(function (img) {
@@ -96,13 +113,58 @@
     img.addEventListener("error", miss);
   });
 
+  /* ---------- Instagram: últimos posteos ----------
+     Si CONTACT.instagramFeed tiene una URL de feed JSON (por ejemplo de Behold.so),
+     se rellenan los recuadros con los 4 posteos más recientes y cada uno abre su post.
+     Si no hay feed o falla, se quedan los recuadros enlazando al perfil. */
+  function loadInstagram() {
+    var grid = document.getElementById("ig-grid");
+    if (!grid || !C.instagramFeed || !window.fetch) return;
+    fetch(C.instagramFeed)
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (data) {
+        var posts = (Array.isArray(data) ? data : (data.posts || data.data || [])).slice(0, 4);
+        var tiles = $all(".ig-post", grid);
+        posts.forEach(function (p, i) {
+          var a = tiles[i];
+          var isVideo = p.mediaType === "VIDEO" || p.media_type === "VIDEO";
+          var src = (p.sizes && p.sizes.medium && p.sizes.medium.mediaUrl) ||
+            (isVideo ? (p.thumbnailUrl || p.thumbnail_url) : (p.mediaUrl || p.media_url)) ||
+            p.thumbnailUrl || p.thumbnail_url;
+          if (!a || !src) return;
+          if (p.permalink) a.href = p.permalink;
+          var img = a.querySelector("img");
+          img.classList.remove("is-missing");
+          img.alt = (p.prunedCaption || p.caption || "").slice(0, 140);
+          img.src = src;
+        });
+      })
+      .catch(function () { /* sin feed: se quedan los enlaces al perfil */ });
+  }
+
   /* ---------- quote form ----------
-     De momento abre el correo del usuario con la consulta ya escrita (mailto).
-     Cuando elijáis servicio (Formspree, Web3Forms…), se cambia solo esta función. */
+     Envía la consulta con Web3Forms (CONTACT.formKey) y llega a CONTACT.email.
+     Las etiquetas del mail van en español para el equipo. */
   var form = document.getElementById("quote-form");
+  var sendBtn = form.querySelector('button[type="submit"]');
+  var sending = false;
+
+  function showMsg(text, ok, withEmail) {
+    var msg = form.querySelector(".form__msg");
+    msg.className = "form__msg" + (ok ? " is-ok" : "");
+    msg.textContent = text;
+    if (withEmail) {
+      msg.appendChild(document.createTextNode(" "));
+      var a = document.createElement("a");
+      a.href = "mailto:" + C.email;
+      a.textContent = C.email;
+      msg.appendChild(a);
+    }
+  }
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    var msg = form.querySelector(".form__msg");
+    if (sending) return;
     var f = form.elements;
     var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.value.trim());
     var invalid = [];
@@ -113,34 +175,49 @@
     invalid.forEach(function (el) { el.closest(".field").classList.add("is-invalid"); });
 
     if (invalid.length || !f.privacy.checked) {
-      msg.className = "form__msg";
-      msg.textContent = t("form.errors");
+      showMsg(t("form.errors"), false);
       (invalid[0] || f.privacy).focus();
       return;
     }
 
-    var lines = [
-      t("form.name") + ": " + f.name.value.trim(),
-      t("form.email") + ": " + f.email.value.trim(),
-      t("form.phone") + ": " + f.phone.value.trim(),
-      t("form.type") + ": " + f.type.value.trim(),
-      t("form.date") + ": " + f.date.value,
-      t("form.guests") + ": " + f.guests.value,
-      "",
-      t("form.message") + ":",
-      f.message.value.trim()
-    ];
-    var subject = t("form.subject") + " · " + f.name.value.trim();
-    window.location.href = "mailto:" + C.email +
-      "?subject=" + encodeURIComponent(subject) +
-      "&body=" + encodeURIComponent(lines.join("\n"));
+    var name = f.name.value.trim();
+    var data = {
+      access_key: C.formKey,
+      subject: "Nueva consulta de " + name + " · Web Poshito",
+      from_name: "Web Poshito",
+      replyto: f.email.value.trim(),
+      botcheck: f.botcheck.checked ? "1" : "",
+      "Nombre": name,
+      "Email": f.email.value.trim(),
+      "Teléfono": f.phone.value.trim() || "-",
+      "Tipo de evento": f.type.value.trim() || "-",
+      "Fecha": f.date.value || "-",
+      "Invitados": f.guests.value || "-",
+      "Mensaje": f.message.value.trim(),
+      "Idioma de la web": current.toUpperCase()
+    };
 
-    msg.className = "form__msg is-ok";
-    msg.textContent = t("form.sent") + " ";
-    var a = document.createElement("a");
-    a.href = "mailto:" + C.email;
-    a.textContent = C.email;
-    msg.appendChild(a);
+    sending = true;
+    sendBtn.disabled = true;
+    showMsg(t("form.sending"), true);
+
+    // FormData: envío simple, sin petición previa (preflight) del navegador
+    var body = new FormData();
+    Object.keys(data).forEach(function (k) { body.append(k, data[k]); });
+
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Accept": "application/json" },
+      body: body
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res.success) throw new Error(res.message);
+        form.reset();
+        showMsg(t("form.sent"), true);
+      })
+      .catch(function () { showMsg(t("form.fail"), false, true); })
+      .then(function () { sending = false; sendBtn.disabled = false; });
   });
 
   /* ---------- init ---------- */
@@ -148,4 +225,5 @@
   if (y) y.textContent = new Date().getFullYear();
   applyContact();
   setLang(initialLang(), false);
+  loadInstagram();
 })();

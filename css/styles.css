@@ -22,7 +22,9 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+html { scroll-behavior: smooth; }
+/* --nav-h: altura real del nav, la calcula main.js con ResizeObserver */
+section[id] { scroll-margin-top: var(--nav-h, 88px); }
 body {
   margin: 0;
   background: var(--crema);
@@ -70,6 +72,7 @@ button { font: inherit; cursor: pointer; }
 }
 .btn:hover { transform: translateY(-2px); }
 .btn:active { transform: translateY(0); }
+.btn:disabled { opacity: .6; cursor: default; transform: none; }
 .btn--primary { background: var(--rojo); color: var(--blanco); }
 .btn--primary:hover { background: #bf412e; }
 .btn--dark { background: var(--negro); color: var(--crema); }
@@ -108,6 +111,9 @@ button { font: inherit; cursor: pointer; }
 /* ---------- Hero ---------- */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) 560px; gap: 64px; align-items: center; padding-top: 40px; padding-bottom: 96px; }
 .hero__text .h1 { margin-bottom: 28px; }
+/* ES: el título es más largo; se ajusta al ancho de la columna para quedar en 2 líneas como en EN */
+.hero__text { container-type: inline-size; }
+:lang(es) .hero__text .h1 { font-size: min(clamp(48px, 6.4vw, 92px), 13.4cqi); }
 .hero__text .lead { margin-bottom: 28px; max-width: 656px; }
 .hero__ctas { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
 .hero__ig { display: inline-flex; align-items: center; gap: 8px; color: var(--marron); }
@@ -118,7 +124,7 @@ button { font: inherit; cursor: pointer; }
 .hero__disc { position: absolute; inset: 20px; background: var(--blanco); border-radius: 50%; display: grid; place-items: center; }
 .hero__disc img { width: 78.5%; height: auto; }
 .sticker {
-  position: absolute; top: 30px; left: 64%;
+  position: absolute; top: 30px; right: -10px; /* anclado a la derecha: no se sale con textos largos */
   background: var(--rojo); color: var(--blanco); font-family: var(--f-marker); font-size: 22px; line-height: 1.2;
   padding: 12px 22px; border-radius: 999px; transform: rotate(8deg); white-space: nowrap;
 }
@@ -154,13 +160,31 @@ button { font: inherit; cursor: pointer; }
 
 /* About */
 .about { background: var(--blanco); }
-.about__inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 80px; align-items: center; padding-top: 120px; padding-bottom: 120px; }
+.about__inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 64px; align-items: center; padding-top: 120px; padding-bottom: 120px; }
 .about__text .h2 { margin-bottom: 20px; line-height: 1; }
-.team { display: flex; gap: 32px; }
+.team { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; } /* las fotos crecen con la columna */
 .team li { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.team__photo { width: 180px; height: 220px; border-radius: 90px; border: 2px solid var(--negro); background: var(--crema-oscuro); overflow: hidden; }
+.team__photo { width: 100%; aspect-ratio: 180 / 220; border-radius: 999px; border: 2px solid var(--negro); background: var(--crema-oscuro); overflow: hidden; }
 .team__photo img { width: 100%; height: 100%; object-fit: cover; }
 .team span { font-family: var(--f-display); font-weight: 700; font-size: 22px; }
+
+.about__text .body + .body { margin-top: 16px; }
+
+/* What we offer (dentro de #services) */
+.offer__inner {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); grid-template-areas: "title list" "cta list"; grid-template-rows: auto 1fr;
+  column-gap: 80px; row-gap: 20px; align-items: start;
+}
+.offer { margin-top: clamp(72px, 8vw, 112px); }
+.offer__title { grid-area: title; }
+.offer__cta { grid-area: cta; }
+.offer__list { grid-area: list; }
+.offer__cta .body { max-width: 480px; margin-bottom: 28px; }
+.offer__ctas { display: flex; flex-wrap: wrap; gap: 16px; }
+.offer__list li { display: flex; align-items: flex-start; gap: 20px; padding: 28px 0; border-top: 2px solid var(--negro); }
+.offer__list li:last-child { border-bottom: 2px solid var(--negro); }
+.offer__mark { font-family: var(--f-marker); font-size: 28px; line-height: 1; color: var(--rojo); flex: none; padding-top: 2px; }
+.offer__list p { font-family: var(--f-display); font-weight: 700; font-size: 26px; line-height: 1.25; }
 
 /* How it works */
 .how { background: var(--negro); color: var(--crema); padding: 120px 0; }
@@ -208,6 +232,8 @@ button { font: inherit; cursor: pointer; }
 
 /* Instagram */
 .section--ig { padding-top: 40px; }
+.ig-handle { display: inline-block; }
+.ig-handle:hover { text-decoration: underline; }
 .ig-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .ig-post { aspect-ratio: 1; border-radius: 20px; background: var(--crema-oscuro); position: relative; overflow: hidden; display: grid; place-items: center; }
 .ig-post img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
@@ -250,7 +276,6 @@ img.is-missing { display: none; }
   .contact { grid-template-columns: 420px minmax(0, 1fr); }
   .contact__info, .form { padding: 44px; }
   .about__inner { gap: 48px; }
-  .team__photo { width: 150px; height: 184px; }
 }
 
 @media (max-width: 1080px) {
@@ -273,6 +298,8 @@ img.is-missing { display: none; }
   .section__head--split { flex-direction: column; align-items: flex-start; gap: 20px; }
   .cards { grid-template-columns: 1fr 1fr; gap: 24px; }
   .about__inner { grid-template-columns: 1fr; }
+  .team { max-width: 640px; }
+  .offer__inner { grid-template-columns: 1fr; grid-template-areas: "title" "list" "cta"; grid-template-rows: auto; row-gap: 32px; }
   .contact { grid-template-columns: 1fr; }
   .steps { grid-template-columns: 1fr; gap: 0; }
   .steps li { padding: 20px 0; }
@@ -280,9 +307,32 @@ img.is-missing { display: none; }
   .footer__inner { flex-direction: column; text-align: center; }
 }
 
+/* Escritorio: #services y #contact entran enteras bajo el nav al navegar desde el menú.
+   En ventanas muy bajas (<= 700px) la sección crece normal. */
+@media (min-width: 1081px) and (min-height: 701px) {
+  #services, #contact {
+    display: flex; flex-direction: column; justify-content: center;
+    min-height: calc(100svh - var(--nav-h, 88px));
+    padding-top: clamp(20px, 4vh, 120px); padding-bottom: clamp(20px, 4vh, 120px);
+  }
+  #services { padding-bottom: 120px; } /* "Qué ofrecemos" va debajo: solo el inicio (título + tarjetas) entra en la ventana */
+  #services .section__head { margin-bottom: clamp(24px, 4vh, 56px); }
+  /* la imagen usa el alto libre de la ventana (430px = resto de la sección); nunca más que su tamaño natural */
+  #services .card__img { max-height: max(140px, calc(100svh - var(--nav-h, 88px) - 430px)); }
+
+  .contact__info { padding: clamp(24px, 3.5vh, 56px); gap: clamp(12px, 2vh, 24px); }
+  .channels { gap: clamp(10px, 1.6vh, 20px); padding-top: clamp(4px, 1vh, 16px); }
+  .form { padding: clamp(24px, 3.5vh, 56px); gap: clamp(12px, 1.8vh, 24px); }
+  .form__grid { row-gap: clamp(12px, 1.8vh, 24px); }
+  .field { gap: clamp(4px, .8vh, 8px); }
+  .field input { min-height: clamp(44px, 6.4vh, 52px); padding-top: clamp(10px, 1.6vh, 14px); padding-bottom: clamp(10px, 1.6vh, 14px); }
+  .field textarea { min-height: 64px; height: clamp(64px, 9vh, 140px); }
+  .form__send { flex-wrap: nowrap; }
+  .form__note { flex: 1 1 0; min-width: 0; }
+}
+
 @media (max-width: 640px) {
   :root { --pad: 20px; }
-  html { scroll-padding-top: 90px; }
   .nav__inner { padding-top: 12px; padding-bottom: 12px; gap: 12px; }
   .nav__logo img { width: 112px; }
   .lang { padding: 3px 3px 3px 9px; }
@@ -295,7 +345,7 @@ img.is-missing { display: none; }
   .lead { font-size: 18px; }
   .hero__ctas { flex-direction: column; align-items: stretch; }
   .hero__ctas .btn { white-space: normal; }
-  .sticker { font-size: 16px; padding: 8px 14px; top: 4%; left: 56%; }
+  .sticker { font-size: 16px; padding: 8px 14px; top: 4%; right: -6px; }
 
   .section { padding-top: 80px; padding-bottom: 80px; }
   .section__head { margin-bottom: 36px; }
@@ -304,8 +354,11 @@ img.is-missing { display: none; }
   .strip span, .strip i { font-size: 22px; }
   .cards { grid-template-columns: 1fr; }
   .about__inner { padding-top: 80px; padding-bottom: 80px; gap: 40px; }
-  .team { gap: 12px; justify-content: space-between; }
-  .team__photo { width: 28vw; height: 34vw; max-width: 150px; max-height: 184px; }
+  .offer { margin-top: 64px; }
+  .offer__list li { gap: 14px; padding: 22px 0; }
+  .offer__list p { font-size: 21px; }
+  .offer__ctas { flex-direction: column; align-items: stretch; }
+  .team { gap: 12px; }
   .team span { font-size: 18px; }
   .how { padding: 80px 0; }
   .how .h2 { margin-bottom: 32px; }

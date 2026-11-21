@@ -7,7 +7,12 @@ window.CONTACT = {
   whatsappNumber: "31642376311",        // solo dígitos, con prefijo de país
   phoneDisplay: "+31 6 4237 6311",      // como se muestra en la web
   email: "somosposhito@gmail.com",
-  instagram: "somos.poshito"            // sin @
+  instagram: "somos.poshito",           // sin @
+  // Feed JSON con los últimos posteos (Behold.so u otro servicio que devuelva JSON).
+  // Vacío: la grilla muestra los recuadros y cada uno lleva al perfil de Instagram.
+  instagramFeed: "",
+  // Clave de Web3Forms: los mensajes del formulario llegan a somosposhito@gmail.com
+  formKey: "ded58a36-faf4-4166-9ce7-2f382966841c"
 };
 
 window.I18N = {
@@ -44,6 +49,13 @@ window.I18N = {
     "about.eyebrow": "About us",
     "about.title": "Three friends, one kitchen",
     "about.text": "We started cooking for friends and family, and word of mouth did the rest. We're still the same today: fresh market produce, home recipes and lots of love on every tray.",
+    "about.text2": "We're a group of Argentinian and Spanish chefs with years of experience in both classic taverns and neighbourhood eateries and fine dining restaurants. We offer tailor-made food solutions for events, gatherings or everyday life.",
+    "about.text3": "We focus on the quality of our food, and on turning traditional dishes and bites into a memorable experience.",
+    "offer.title": "What we offer",
+    "offer.1": "Catering service.",
+    "offer.2": "Dishes made by us, packed and ready for you to finish and enjoy at your own event.",
+    "offer.3": "Everyday classics with our own twist: Spanish tortilla, croquetas, Argentinian empanadas and more.",
+    "offer.cta": "Have an event, meeting or party that needs something different? Don't hesitate to message us and we'll see what we can do for you.",
     "how.eyebrow": "How it works",
     "how.title": "Ordering is easy",
     "how.1": "You message us",
@@ -76,7 +88,9 @@ window.I18N = {
     "form.note": "It goes straight to our inbox. We reply within 24 hours.",
     "form.subject": "Quote request",
     "form.errors": "Please fill in your name, a valid email, a message and accept the privacy policy.",
-    "form.sent": "Your email app should open with your enquiry ready. If it doesn't, write to us at",
+    "form.sending": "Sending…",
+    "form.sent": "Thank you! We got your enquiry and will reply within 24 hours.",
+    "form.fail": "Something went wrong and it wasn't sent. Please try again or write to us at",
     "ig.title": "Follow us on Instagram",
     "ig.cta": "Follow on Instagram",
     "ig.post": "Instagram post",
@@ -118,6 +132,13 @@ window.I18N = {
     "about.eyebrow": "Nosotros",
     "about.title": "Tres amigos, una cocina",
     "about.text": "Empezamos cocinando para amigos y familia, y el boca a boca hizo el resto. Hoy seguimos igual: producto de mercado, recetas de casa y mucho cariño en cada bandeja.",
+    "about.text2": "Somos un grupo de chefs argentinos y españoles con años de experiencia tanto en tabernas y bodegones como en restaurantes de alta cocina. Ofrecemos soluciones gastronómicas personalizadas para eventos, reuniones o el día a día.",
+    "about.text3": "Nos focalizamos en la calidad de nuestras comidas. En convertir platos o bites tradicionales en una experiencia memorable.",
+    "offer.title": "¿Qué ofrecemos?",
+    "offer.1": "Servicio de catering.",
+    "offer.2": "Platos elaborados por nosotros, envasados y preparados para finalizar y disfrutar en tu propio evento.",
+    "offer.3": "Comidas clásicas con nuestro toque para todos los días: tortilla española, croquetas, empanadas argentinas y más.",
+    "offer.cta": "¿Tienes algún evento, reunión o fiesta que precisa de un servicio diferente? No dudes en escribirnos y vemos qué podemos hacer por ti.",
     "how.eyebrow": "Cómo funciona",
     "how.title": "Pedir es muy fácil",
     "how.1": "Nos escribes",
@@ -150,7 +171,9 @@ window.I18N = {
     "form.note": "Llega directo a nuestro correo. Respondemos en menos de 24 h.",
     "form.subject": "Solicitud de presupuesto",
     "form.errors": "Completa tu nombre, un email válido, el mensaje y acepta la política de privacidad.",
-    "form.sent": "Se abrirá tu app de correo con la consulta lista. Si no se abre, escríbenos a",
+    "form.sending": "Enviando…",
+    "form.sent": "¡Gracias! Recibimos tu consulta y te respondemos en menos de 24 h.",
+    "form.fail": "Algo falló y no se envió. Inténtalo de nuevo o escríbenos a",
     "ig.title": "Síguenos en Instagram",
     "ig.cta": "Seguir en Instagram",
     "ig.post": "Post de Instagram",
@@ -192,6 +215,13 @@ window.I18N = {
     "about.eyebrow": "Over ons",
     "about.title": "Drie vrienden, één keuken",
     "about.text": "We begonnen met koken voor vrienden en familie, en mond-tot-mondreclame deed de rest. Dat doen we nog steeds zo: verse marktproducten, recepten van thuis en veel liefde op elke schaal.",
+    "about.text2": "Wij zijn een groep Argentijnse en Spaanse chefs met jarenlange ervaring in zowel traditionele tavernes en eetcafés als in restaurants met haute cuisine. We bieden culinaire oplossingen op maat voor events, bijeenkomsten of voor elke dag.",
+    "about.text3": "We richten ons op de kwaliteit van ons eten, en op het veranderen van traditionele gerechten en hapjes in een onvergetelijke ervaring.",
+    "offer.title": "Wat bieden wij?",
+    "offer.1": "Cateringservice.",
+    "offer.2": "Gerechten door ons bereid, verpakt en klaar om af te maken en te genieten op je eigen event.",
+    "offer.3": "Klassiekers voor elke dag met onze eigen twist: Spaanse tortilla, croquetas, Argentijnse empanadas en meer.",
+    "offer.cta": "Heb je een event, bijeenkomst of feest dat om iets anders vraagt? Stuur ons gerust een bericht en we kijken wat we voor je kunnen doen.",
     "how.eyebrow": "Zo werkt het",
     "how.title": "Bestellen is heel makkelijk",
     "how.1": "Je stuurt ons een bericht",
@@ -224,7 +254,9 @@ window.I18N = {
     "form.note": "Komt direct in onze mailbox. We reageren binnen 24 uur.",
     "form.subject": "Offerteaanvraag",
     "form.errors": "Vul je naam, een geldig e-mailadres en een bericht in en ga akkoord met het privacybeleid.",
-    "form.sent": "Je mailapp opent met je aanvraag klaar. Gebeurt dat niet? Mail ons op",
+    "form.sending": "Versturen…",
+    "form.sent": "Bedankt! We hebben je aanvraag ontvangen en reageren binnen 24 uur.",
+    "form.fail": "Er ging iets mis en het is niet verstuurd. Probeer het opnieuw of mail ons op",
     "ig.title": "Volg ons op Instagram",
     "ig.cta": "Volg op Instagram",
     "ig.post": "Instagram-post",

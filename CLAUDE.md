@@ -35,7 +35,8 @@ Web estática (HTML + CSS + JS, sin build ni dependencias) publicada con GitHub 
 
 ## Pendiente
 
-- Fotos reales en `img/` (servicios, equipo, Instagram)
-- Servicio para que el formulario envíe directo al mail (hoy abre el cliente de correo con mailto)
+- Feed de Instagram: crear feed JSON en Behold.so y poner la URL en `CONTACT.instagramFeed` (ver README)
+- Probar el formulario (Web3Forms) en la web publicada
 - Página de política de privacidad (el formulario la pide)
-- Mover el repo a la organización `somosposhito` como `somosposhito.github.io`, para que no quede bajo carolinaferreyra.space
+- Dominio propio: somosposhito.nl (GoDaddy, archivo `CNAME`); configurar DNS, Custom domain y Enforce HTTPS en GitHub Pages (ver README)
+- Opcional: mover el repo a una organización `somosposhito` (el dominio no cambia)

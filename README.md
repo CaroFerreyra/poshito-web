@@ -27,13 +27,23 @@ Se actualiza solo en toda la web (botones, enlaces de WhatsApp, Instagram y mail
 
 ## Fotos
 
-Exporta las imágenes desde Figma en JPG y guárdalas en `img/` con estos nombres:
+Las fotos están en `img/`:
 
-- `servicio-1.jpg`, `servicio-2.jpg`, `servicio-3.jpg`: tarjetas de servicios
-- `equipo-javier.jpg`, `equipo-tamara.jpg`, `equipo-leandro.jpg`: fotos del equipo
-- `instagram-1.jpg` a `instagram-4.jpg`: grilla de Instagram
+- `image-1.png`, `image-2.png`, `image-3.png`: tarjetas de servicios (en orden)
+- `image-javier.png`, `image-tamara.png`, `image-leandro.png`: fotos del equipo
+- `post-1.png` a `post-4.png`: fotos de la grilla de Instagram (si se configura el feed, se reemplazan por los posteos reales)
 
 Si falta alguna, se ve el recuadro beige de placeholder.
+
+## Instagram (últimos posteos)
+
+Instagram no deja leer los posteos desde una web estática, así que hace falta un servicio intermedio gratuito que genere un feed JSON. Recomendado: [Behold.so](https://behold.so)
+
+1. Crear cuenta en Behold y conectar la cuenta de Instagram `@somos.poshito`.
+2. Crear un feed de tipo **JSON** y copiar su URL (algo como `https://feeds.behold.so/XXXX`).
+3. Pegarla en `js/i18n.js`, dentro de `CONTACT`: `instagramFeed: "https://feeds.behold.so/XXXX"`.
+
+La grilla muestra los 4 posteos más recientes y cada uno abre su post. Sin feed, los recuadros enlazan al perfil.
 
 ## Idiomas
 
@@ -44,13 +54,26 @@ Si falta alguna, se ve el recuadro beige de placeholder.
 
 ## Formulario
 
-De momento, al enviar se abre el correo del usuario con la consulta ya escrita, dirigida a `CONTACT.email`.
-Cuando elijáis un servicio (Formspree, Web3Forms…), solo hay que cambiar el bloque "quote form" de `js/main.js`.
+Las consultas se envían con [Web3Forms](https://web3forms.com) y llegan a somosposhito@gmail.com.
+La clave está en `js/i18n.js`, en `CONTACT.formKey`. El envío está en el bloque "quote form" de `js/main.js`.
+En la configuración del formulario en Web3Forms, la Website URL es `somosposhito.nl`.
 
 ## Publicar en GitHub Pages
 
-1. Crea un repositorio nuevo en GitHub (por ejemplo `poshito-web`).
-2. Sube todo el contenido de esta carpeta a la raíz del repo (`index.html` tiene que quedar en la raíz).
-3. En el repo: **Settings → Pages → Build and deployment**, elige **Deploy from a branch**, rama `main`, carpeta `/ (root)` y guarda.
-4. En un par de minutos estará en `https://TU-USUARIO.github.io/poshito-web/`.
-5. Dominio propio (opcional): en la misma pantalla de Pages, escribe el dominio en **Custom domain** y configura el DNS en tu proveedor.
+La web se publica desde la rama `main` (carpeta raíz) del repo `CaroFerreyra/poshito-web`, con el dominio **https://somosposhito.nl**.
+
+- El archivo `CNAME` (en la raíz) le dice a GitHub cuál es el dominio. No borrarlo.
+- En el repo: **Settings → Pages**: rama `main`, carpeta `/ (root)`, Custom domain `somosposhito.nl` y **Enforce HTTPS** activado.
+- Cada push a `main` se publica solo en un par de minutos.
+
+### DNS en GoDaddy (somosposhito.nl)
+
+| Tipo  | Nombre | Valor                    |
+|-------|--------|--------------------------|
+| A     | @      | 185.199.108.153          |
+| A     | @      | 185.199.109.153          |
+| A     | @      | 185.199.110.153          |
+| A     | @      | 185.199.111.153          |
+| CNAME | www    | caroferreyra.github.io   |
+
+Sin reenvío (forwarding) activado en GoDaddy. `www.somosposhito.nl` redirige solo a `somosposhito.nl`.
